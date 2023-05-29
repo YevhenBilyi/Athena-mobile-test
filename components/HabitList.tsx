@@ -1,17 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, TextInput } from 'react-native';
 import * as Types  from '../types/types'
+import CreateHabit from './CreateHabit';
 
 
 
 
 
-const HabitComp = (props: { data: Types.Habit }) => {
-  const url = `/goal/${props.data.id}/`;
+const HabitComp = ({data, handleDelete}: {data: Types.Habit, handleDelete:any}) => {
+  
 
-  const handleDelete = () => {
-    // Handle delete logic
-  };
 
   const handlePress = () => {
     // take to the goal
@@ -19,7 +17,7 @@ const HabitComp = (props: { data: Types.Habit }) => {
 
   return (
     <View>
-      <Button onPress={handlePress} title={props.data.name} />
+      <Button onPress={handlePress} title={data.name} />
       <View>
         <Button onPress={handleDelete} title="trash" />
       </View>
@@ -31,13 +29,27 @@ const HabitComp = (props: { data: Types.Habit }) => {
 
 
 
-const HabitList = (props: { data: Types.Habit[]}) => {
+const HabitList = ({data, goalNameId}: { data: Types.Habit[],goalNameId: {id: number, name: string}[]}) => {
+  const [habitArray, setHabitArray] = useState(data);
 
+  const [showMenu, setShowMenu] = useState(false);
+
+  const handleDelete = (index:any) =>{
+    const newArray = [...habitArray];
+    newArray.splice(index, 1);
+    setHabitArray(newArray);
+  }
+  const handleCreate = () => { 
+  }
 
   return (
     <View>
 
-      {props.data.map(goal => <HabitComp data={goal} key={goal.id}/>)}
+      {habitArray.map(habit => <HabitComp data={habit} handleDelete={handleDelete} key={habit.id}/>)}
+      <Button title="Add Habit" onPress={()=>setShowMenu(!showMenu)}/>
+      {showMenu && (
+        <CreateHabit handleCreate={handleCreate} goalNameId={goalNameId} />
+      )}
 
     </View>
   );
