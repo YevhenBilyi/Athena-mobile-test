@@ -28,7 +28,8 @@ const CharacterComp = ({ data, handleDelete }: {data:Types.Character, handleDele
 
 
 
-const CharacterList = ({ data, goalNameId}:{data:Types.Character[], goalNameId: {id: number, name: string}[]} ) => {
+const CharacterList = ({ data, goalNameId, handleCreateGeneric, handleDeleteCharacter}:
+  {data:Types.Character[], goalNameId: {id: number, name: string}[], handleCreateGeneric:any, handleDeleteCharacter:any} ) => {
   const [characterArray, setCharacterArray] = useState(data);
   useEffect(() => {
     setCharacterArray(data);
@@ -37,10 +38,9 @@ const CharacterList = ({ data, goalNameId}:{data:Types.Character[], goalNameId: 
   const [newCharacterName, setNewCharacterName] = useState("");
   const [selectedGoal, setSelectedGoal] = useState(null);
   
-  const handleDelete = (index:any) =>{
-    const newArray = [...characterArray];
-    newArray.splice(index, 1);
-    setCharacterArray(newArray);
+  const handleDelete = (characterId:string,goalId:Number) =>{
+    handleDeleteCharacter(characterId,goalId, "character");
+    
   }
   const handleCreate = () => {
     if(newCharacterName.length>0 && selectedGoal){
@@ -51,18 +51,15 @@ const CharacterList = ({ data, goalNameId}:{data:Types.Character[], goalNameId: 
         id: "1",
         type: "character"
       }
-      const newArray = [...characterArray];
-      newArray.push(newCharacter);
-      setCharacterArray(newArray);
+      handleCreateGeneric(newCharacter, selectedGoal, "character");
       setNewCharacterName("");
-      
     }
   }
 
   return (
     <View>
 
-      {characterArray.map(character => <CharacterComp data={character} handleDelete={()=>handleDelete(characterArray.indexOf(character))} key={character.id}/>)}
+      {characterArray.map(character => <CharacterComp data={character} handleDelete={()=>handleDelete(character.id,character.goal)} key={character.id}/>)}
       <TextInput
         value={newCharacterName}
         onChangeText={(text)=>setNewCharacterName(text)}

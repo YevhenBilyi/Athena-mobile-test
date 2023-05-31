@@ -7,7 +7,7 @@ import { TextInput } from 'react-native-gesture-handler';
 
 const GoalComp = ({data, handleDelete}: { data: Types.Goal,handleDelete:any }) => {
 
-
+  console.log("Goal id is " + data.id);
 
   const handlePress = () => {
     // take to the goal

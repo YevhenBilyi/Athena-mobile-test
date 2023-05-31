@@ -31,7 +31,8 @@ const TaskComp = ({data, handleDelete}: { data: Types.Task, handleDelete:any }) 
 
 
 
-const TaskList = ({data, goalNameId}: {data:Types.Task[], goalNameId:{id:number, name:string}[]}) => {
+const TaskList = ({data, goalNameId, handleCreateGeneric, handleDeleteTask}:
+   {data:Types.Task[], goalNameId:{id:number, name:string}[], handleCreateGeneric:any, handleDeleteTask:any}) => {
 
   const [taskArray, setTaskArray] = useState(data);
   useEffect(() => {
@@ -46,10 +47,8 @@ const TaskList = ({data, goalNameId}: {data:Types.Task[], goalNameId:{id:number,
   const [frequencyType, setFrequencyType] = useState("weekly");
   let i = 0;
 
-  const handleDelete = (index:any) =>{
-    const newArray = [...taskArray];
-    newArray.splice(index, 1);
-    setTaskArray(newArray);
+  const handleDelete = (taskId:string, goalId:Number) =>{
+    handleDeleteTask(taskId, goalId, "task");
   }
   const handleRepeatChange = () => {
     setRepeat(!repeat);
@@ -68,7 +67,7 @@ const TaskList = ({data, goalNameId}: {data:Types.Task[], goalNameId:{id:number,
         finished: false,
         master: undefined
       }
-      setTaskArray([...taskArray, newTask]);
+      handleCreateGeneric(newTask, selectedGoal, "task");
       setTaskName("");
       setSelectedGoal(null);
       setDate(new Date());
@@ -79,15 +78,10 @@ const TaskList = ({data, goalNameId}: {data:Types.Task[], goalNameId:{id:number,
   }
 
 
-
-      
-  console.log(taskName, selectedGoal, date, repeat, frequency, frequencyType);
-
-
   return (
     <View>
 
-      {taskArray.map(task => <TaskComp data={task} handleDelete={()=>handleDelete(taskArray.indexOf(task))} key={task.id}/>)}
+      {taskArray.map(task => <TaskComp data={task} handleDelete={()=>handleDelete(task.id, task.goal)} key={task.id}/>)}
 
       <TextInput
         value={taskName}

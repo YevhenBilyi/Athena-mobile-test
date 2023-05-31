@@ -13,129 +13,79 @@ import * as Types  from './types/types';
 
 
 
-//  habit example
-const testHabitLoop: Types.HabitLoop={  type:"daily"}
-const testHabitScale: Types.HabitScale={  type:"boolean"}
-
-const testHabit: Types.Habit={
-  description: "my habbit example",
-  type: 'habit',
-  goal: 61,
-  id: "123",
-  loop: testHabitLoop,
-  name: "habitExample1",
-  scale: testHabitScale,
-  show_in_lobby: true,
-  start_date: "2023-05-17"
-}
-const arrayOfHabits = [testHabit]
-
-// task example
-const testTask: Types.Task={
-  due_date: "2023-05-17",
-  trophy_date: null,
-  type: 'task',
-  goal: 61,
-  id: "1",
-  name: "taskExample1",
-  show_in_lobby: true,
-  finished: false
-}
-const arrayOfTasks = [testTask]
-
-// character example
-const testCharacter: Types.Character={
-  goal: 61,
-  type: 'character',
-  id: "11",
-  name: "characterExample",
-  show_in_lobby: true
-}
-
-//generic example
-const testGeneric: Types.Generic={
-  goal: 61,
-  type: 'generic',
-  id: "1234",
-  name: "genericExample",
-  show_in_lobby: true
-}
-
-// sheet example
-const testSheet: Types.Sheet={
-  attribute_name: "status",
-  content: "status sheet",
-  created_on: "2023-05-17",
-  id: 1,
-  info: "info sheet",
-  is_active: true,
-  is_deleted: false,
-  sheet_name: "test sheet"
-}
-
-// goal example
-const testGoal: Types.Goal={
-  goalitems: arrayOfHabits,
-  habits: arrayOfHabits,
-  tasks: arrayOfTasks,
-  characters: [testCharacter],
-  generics: [testGeneric],
-  id: 61,
-  is_deleted: false,
-  is_active: true,
-  lobby_personal: false,
-  lobby_values: true,
-  itemorder: null,
-  name: "goalExample",
-  sheets: [testSheet]
-}
-
-
-
-
 
 const Drawer = createDrawerNavigator();
 
 function App(){
 
-const [arrayOfGoals, setArrayOfGoals] = useState([testGoal])
-let i = 0;
+const [arrayOfGoals, setArrayOfGoals] = useState([] as Types.Goal[])
+const [goalId, setGoalId] = useState(1)
 
 const handleDeleteGoal = (id: number) => {
   // Handle delete logic
   const newArrayOfGoals = arrayOfGoals.filter(goal => goal.id !== id);
   setArrayOfGoals(newArrayOfGoals);
 };
+
 const handleCreateGoal = (name: string) => {
   // Handle create logic
-  const newGoal: Types.Goal = {
-    goalitems: [],
-    habits: [],
-    tasks: [],
-    characters: [],
-    generics: [],
-    id: i++,
-    is_deleted: false,
-    is_active: true,
-    lobby_personal: false,
-    lobby_values: true,
-    itemorder: null,
-    name: name,
-    sheets: []
+  if(name.length > 0){
+    const newGoal: Types.Goal = {
+      goalitems: [] as Types.Habit[],
+      habits: [] as Types.Habit[],
+      tasks: [] as Types.Task[],
+      characters: [] as Types.Character[],
+      generics: [] as Types.Generic[],
+      id: goalId,
+      is_deleted: false,
+      is_active: true,
+      lobby_personal: false,
+      lobby_values: true,
+      itemorder: null,
+      name: name,
+      sheets: [] as Types.Sheet[]
+    };
+    const newArrayOfGoals = [...arrayOfGoals, newGoal];
+    setArrayOfGoals(newArrayOfGoals);
+    setGoalId(goalId + 1);
   };
-  const newArrayOfGoals = [...arrayOfGoals, newGoal];
+};
+
+const handleCreateGeneric = (generic:Types.Character, goalId:Number, type:string) => {
+  const types = type+'s';
+  const newArrayOfGoals = arrayOfGoals.map(goal => {
+    if(goal.id === goalId){
+      goal[types].push(generic)
+    }
+    return goal
+  });
   setArrayOfGoals(newArrayOfGoals);
 };
+
+const handleDeleteGeneric = (genericId: string, goalId: number, type:String) => {
+  const types = type+'s';
+  const newArrayOfGoals = arrayOfGoals.map(goal => {
+    if(goal.id === goalId){
+      goal[types] = goal[types].filter(generic => generic.id !== genericId)
+    }
+    return goal
+  });
+  setArrayOfGoals(newArrayOfGoals);
+};
+
+
 
   return (
     <NavigationContainer>
       <Drawer.Navigator>
 
         <Drawer.Screen name="Home">
-          {() => <HomeScreen data = {arrayOfGoals} />}
+          {() => <HomeScreen data = {arrayOfGoals}
+           handleCreateGeneric={handleCreateGeneric} handleDeleteGeneric={handleDeleteGeneric} />}
         </Drawer.Screen>
         <Drawer.Screen name="Goals" >
-          {() => <GoalList data = {arrayOfGoals} handleDelete={handleDeleteGoal} handleCreate={handleCreateGoal} />}
+          {() => <GoalList data = {arrayOfGoals} 
+          handleDelete={handleDeleteGoal} handleCreate={handleCreateGoal} />}
         </Drawer.Screen>
         <Drawer.Screen name="Trophies" component={Trophies}/>
         <Drawer.Screen name="Assignments" component={Assignments}/>

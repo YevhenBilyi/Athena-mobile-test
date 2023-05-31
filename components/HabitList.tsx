@@ -29,7 +29,8 @@ const HabitComp = ({data, handleDelete}: {data: Types.Habit, handleDelete:any}) 
 
 
 
-const HabitList = ({data, goalNameId}: { data: Types.Habit[],goalNameId: {id: number, name: string}[]}) => {
+const HabitList = ({data, goalNameId, handleCreateGeneric, handleDeleteHabit}:
+   { data: Types.Habit[],goalNameId: {id: number, name: string}[], handleCreateGeneric:any, handleDeleteHabit:any}) => {
   const [habitArray, setHabitArray] = useState(data);
   useEffect(() => {
     setHabitArray(data);
@@ -37,15 +38,14 @@ const HabitList = ({data, goalNameId}: { data: Types.Habit[],goalNameId: {id: nu
   , [data]);
 
   const [showMenu, setShowMenu] = useState(false);
-  let i = 0;
+  const [i, setI] = useState(1);
 
-  const handleDelete = (index:any) =>{
-    const newArray = [...habitArray];
-    newArray.splice(index, 1);
-    setHabitArray(newArray);
+  const handleDelete = (habitId:string, goalId:Number) =>{
+    handleDeleteHabit(habitId, goalId, "habit");
+
   }
   const handleCreate = (name,goal,scale,rangeStart,rangeEnd,loop,weekdays,description,date) => { 
-    console.log(name,goal,scale,rangeStart,rangeEnd,loop,weekdays,description,date);
+    
     if(name.length>0 && goal && scale && loop){
       const newLoop: Types.HabitLoop = {type: loop}
       if (loop === "weekly" ){
@@ -66,18 +66,16 @@ const HabitList = ({data, goalNameId}: { data: Types.Habit[],goalNameId: {id: nu
         type: "habit",
         show_in_lobby: true
       }
-      const newArray = [...habitArray];
-      newArray.push(newHabit);
-      setHabitArray(newArray);
       setShowMenu(false);
-      i++;
+      setI(i+1);
+      handleCreateGeneric(newHabit, goal, "habit");
     }
   }
 
   return (
     <ScrollView>
 
-      {habitArray.map(habit => <HabitComp data={habit} handleDelete={()=>handleDelete(habitArray.indexOf(habit))} key={habit.id}/>)}
+      {habitArray.map(habit => <HabitComp data={habit} handleDelete={()=>handleDelete(habit.id,habit.goal)} key={habit.id}/>)}
       <Button title="Add Habit" onPress={()=>setShowMenu(!showMenu)}/>
       {showMenu && (
         <CreateHabit handleCreate={handleCreate} goalNameId={goalNameId} key={i} />

@@ -9,7 +9,8 @@ import * as Types  from '../types/types';
 
 const Tab = createMaterialTopTabNavigator();
 
-const HomeScreen = ({data}: { data: Types.Goal[] }) => {
+const HomeScreen = ({data,handleCreateGeneric, handleDeleteGeneric}:
+     { data: Types.Goal[], handleCreateGeneric:any, handleDeleteGeneric:any }) => {
 
     const [goals, setGoals] = useState(data);
     useEffect(() => {
@@ -34,13 +35,16 @@ const HomeScreen = ({data}: { data: Types.Goal[] }) => {
     <Tab.Navigator screenOptions={{}} >
         
         <Tab.Screen name="Habits">
-            {() => <HabitList data = {habits} goalNameId={goalNameId} />}
+            {() => <HabitList data = {habits} goalNameId={goalNameId}
+             handleCreateGeneric={handleCreateGeneric} handleDeleteHabit={handleDeleteGeneric} />}
         </Tab.Screen>
         <Tab.Screen name="Tasks">
-            {() => <TaskList data = {tasks} goalNameId={goalNameId} />}
+            {() => <TaskList data = {tasks} goalNameId={goalNameId}
+            handleCreateGeneric={handleCreateGeneric} handleDeleteTask={handleDeleteGeneric} />}
         </Tab.Screen>
         <Tab.Screen name="Characters">
-            {() => <CharacterList data={characters} goalNameId={goalNameId} />}
+            {() => <CharacterList data={characters} goalNameId={goalNameId}
+            handleCreateGeneric={handleCreateGeneric} handleDeleteCharacter={handleDeleteGeneric} />}
         </Tab.Screen>
     </Tab.Navigator>
     );
