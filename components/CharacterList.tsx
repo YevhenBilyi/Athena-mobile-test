@@ -30,6 +30,10 @@ const CharacterComp = ({ data, handleDelete }: {data:Types.Character, handleDele
 
 const CharacterList = ({ data, goalNameId}:{data:Types.Character[], goalNameId: {id: number, name: string}[]} ) => {
   const [characterArray, setCharacterArray] = useState(data);
+  useEffect(() => {
+    setCharacterArray(data);
+  }
+  , [data]);
   const [newCharacterName, setNewCharacterName] = useState("");
   const [selectedGoal, setSelectedGoal] = useState(null);
   

@@ -1,15 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import { View, Text, Button } from 'react-native';
 import * as Types  from '../types/types';
+import { TextInput } from 'react-native-gesture-handler';
 
 
 
-const GoalComp = (props: { data: Types.Goal }) => {
-  const url = `/goal/${props.data.id}/`;
+const GoalComp = ({data, handleDelete}: { data: Types.Goal,handleDelete:any }) => {
 
-  const handleDelete = () => {
-    // Handle delete logic
-  };
+
 
   const handlePress = () => {
     // take to the goal
@@ -17,7 +15,7 @@ const GoalComp = (props: { data: Types.Goal }) => {
 
   return (
     <View>
-      <Button onPress={handlePress} title={props.data.name} />
+      <Button onPress={handlePress} title={data.name} />
       <View>
         <Button onPress={handleDelete} title="trash" />
       </View>
@@ -29,13 +27,24 @@ const GoalComp = (props: { data: Types.Goal }) => {
 
 
 
-const GoalList = (props: { data: Types.Goal[]}) => {
+const GoalList = ({data, handleDelete, handleCreate}: { data: Types.Goal[], handleDelete:any, handleCreate:any}) => {
+
+  const [goalName, setGoalName] = useState("");
+
 
 
   return (
     <View>
 
-      {props.data.map(goal => <GoalComp data={goal} key={goal.id}/>)}
+      {data.map(goal => <GoalComp data={goal} handleDelete={()=>handleDelete(goal.id)}key={goal.id}/>)}
+      <TextInput
+        placeholder="Name new Goal"
+        value={goalName}
+        onChangeText={(text) => setGoalName(text)}
+      />
+      <Button onPress={()=>handleCreate(goalName)} title="Create Goal" />
+
+
 
     </View>
   );

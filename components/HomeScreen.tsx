@@ -9,8 +9,15 @@ import * as Types  from '../types/types';
 
 const Tab = createMaterialTopTabNavigator();
 
-const HomeScreen = (props: { data: Types.Goal[] }) => {
-    const goals = props.data;
+const HomeScreen = ({data}: { data: Types.Goal[] }) => {
+
+    const [goals, setGoals] = useState(data);
+    useEffect(() => {
+        setGoals(data);
+        
+    }
+    , [data]);
+
     let goalNameId= new Array <{name: string, id: number}>();
     let habits = new Array <Types.Habit>; 
     let characters = new Array <Types.Character>;
@@ -30,7 +37,7 @@ const HomeScreen = (props: { data: Types.Goal[] }) => {
             {() => <HabitList data = {habits} goalNameId={goalNameId} />}
         </Tab.Screen>
         <Tab.Screen name="Tasks">
-            {() => <TaskList data = {tasks} />}
+            {() => <TaskList data = {tasks} goalNameId={goalNameId} />}
         </Tab.Screen>
         <Tab.Screen name="Characters">
             {() => <CharacterList data={characters} goalNameId={goalNameId} />}

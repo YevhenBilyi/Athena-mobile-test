@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Picker } from '@react-native-picker/picker';
+import DatePicker from 'react-native-date-picker';
 
 const CreateHabit = ({handleCreate,goalNameId}:{ handleCreate:any, goalNameId: {id: number, name: string}[]}) => {
 
@@ -9,12 +10,13 @@ const CreateHabit = ({handleCreate,goalNameId}:{ handleCreate:any, goalNameId: {
     const [selectedGoal, setSelectedGoal] = useState(null);
     const [selectedScale, setSelectedScale] = useState(null);
     const [rangeStart, setRangeStart] = useState(0);
-    const [rangeEnd, setRangeEnd] = useState(0);
+    const [rangeEnd, setRangeEnd] = useState(10);
     const [selectedLoop, setSelectedLoop] = useState(null);
     const [weekDays, setWeekDays] = useState([]);
+    const [description, setDescription] = useState("");
+    const [date, setDate] = useState(new Date())
 
     const allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    console.log(weekDays)
     const handleScaleChange = (itemValue:any) => {
         setSelectedScale(itemValue);
         }
@@ -30,7 +32,13 @@ const CreateHabit = ({handleCreate,goalNameId}:{ handleCreate:any, goalNameId: {
     <TextInput
       value={newHabitName}
       onChangeText={(text:any)=>setNewHabitName(text)}
-      placeholder='New Habit'
+      placeholder='Name new Habit'
+    />
+    <Text>Start Date:</Text>
+    <DatePicker
+        date={date}
+        onDateChange={setDate}
+        mode="date"
     />
 
     {/* Choose one of the existing goals */}
@@ -49,6 +57,7 @@ const CreateHabit = ({handleCreate,goalNameId}:{ handleCreate:any, goalNameId: {
         selectedValue={selectedScale}
         onValueChange={(value) => handleScaleChange(value)}
       >
+        <Picker.Item label="Select Scale" value={null} />
         <Picker.Item label="Boolean" value="boolean" />
         <Picker.Item label="Range" value="range" />
         <Picker.Item label="Numeric" value="numeric" />
@@ -76,6 +85,7 @@ const CreateHabit = ({handleCreate,goalNameId}:{ handleCreate:any, goalNameId: {
         selectedValue={selectedLoop}
         onValueChange={(value) => handleLoopChange(value)}
       >
+        <Picker.Item label="Select Loop" value={null} />
         <Picker.Item label="Daily" value="daily" />
         <Picker.Item label="Routine" value="routine" />
     </Picker>
@@ -90,15 +100,22 @@ const CreateHabit = ({handleCreate,goalNameId}:{ handleCreate:any, goalNameId: {
                     } else {
                         setWeekDays(weekDays.filter((d) => d !== day));
                     }
-                }}
+                }} key={day}
                 />
             ))}
 
         </View>
 
     )}
+
+    <TextInput
+        value={description}
+        onChangeText={(text)=>setDescription(text)}
+        placeholder='Describe your habit'
+    />
+
 {/* need to create handleCreate function */}
-    <Button title="Create" onPress={()=>handleCreate()}/>
+    <Button title="Create" onPress={()=>handleCreate(newHabitName,selectedGoal,selectedScale,rangeStart,rangeEnd,selectedLoop,weekDays,description,date)}/>
   </View>
   );
 };

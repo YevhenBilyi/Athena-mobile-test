@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import GoalList from './components/GoalList';
 import HomeScreen from './components/HomeScreen';
 import Logout from './components/Logout';
@@ -89,13 +89,43 @@ const testGoal: Types.Goal={
   name: "goalExample",
   sheets: [testSheet]
 }
-const arrayOfGoals = [testGoal]
+
+
+
+
 
 const Drawer = createDrawerNavigator();
 
-
-
 function App(){
+
+const [arrayOfGoals, setArrayOfGoals] = useState([testGoal])
+let i = 0;
+
+const handleDeleteGoal = (id: number) => {
+  // Handle delete logic
+  const newArrayOfGoals = arrayOfGoals.filter(goal => goal.id !== id);
+  setArrayOfGoals(newArrayOfGoals);
+};
+const handleCreateGoal = (name: string) => {
+  // Handle create logic
+  const newGoal: Types.Goal = {
+    goalitems: [],
+    habits: [],
+    tasks: [],
+    characters: [],
+    generics: [],
+    id: i++,
+    is_deleted: false,
+    is_active: true,
+    lobby_personal: false,
+    lobby_values: true,
+    itemorder: null,
+    name: name,
+    sheets: []
+  };
+  const newArrayOfGoals = [...arrayOfGoals, newGoal];
+  setArrayOfGoals(newArrayOfGoals);
+};
 
   return (
     <NavigationContainer>
@@ -105,7 +135,7 @@ function App(){
           {() => <HomeScreen data = {arrayOfGoals} />}
         </Drawer.Screen>
         <Drawer.Screen name="Goals" >
-          {() => <GoalList data = {arrayOfGoals} />}
+          {() => <GoalList data = {arrayOfGoals} handleDelete={handleDeleteGoal} handleCreate={handleCreateGoal} />}
         </Drawer.Screen>
         <Drawer.Screen name="Trophies" component={Trophies}/>
         <Drawer.Screen name="Assignments" component={Assignments}/>
