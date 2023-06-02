@@ -48,11 +48,11 @@ const HabitList = ({data, goalNameId, handleCreateGeneric, handleDeleteHabit}:
   }
   const handleCreate = ({name,goal,scale,rangeStart,rangeEnd,loop,weekdays,description,date}:
     {name:string, goal:number, scale:any, rangeStart:number, rangeEnd:number, loop:any, weekdays:string[], description:string, date:string }) => { 
-    
+    console.log(name);
     if(name.length>0 && goal && scale && loop){
       const newLoop: Types.HabitLoop = {type: loop}
       if (loop === "weekly" ){
-        const newLoop: Types.HabitLoop = {type: loop, days: weekdays}
+        newLoop.days = weekdays;
       }
       const newScale: Types.HabitScale = {type: scale}
       if(scale === "range"){

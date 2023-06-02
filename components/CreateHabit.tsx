@@ -115,7 +115,16 @@ const CreateHabit = ({handleCreate,goalNameId}:{ handleCreate:any, goalNameId: {
     />
 
 {/* need to create handleCreate function */}
-    <Button title="Create" onPress={()=>handleCreate(newHabitName,selectedGoal,selectedScale,rangeStart,rangeEnd,selectedLoop,weekDays,description,date)}/>
+    <Button title="Create" onPress={()=>handleCreate({
+      name:newHabitName,
+      goal:selectedGoal,
+      scale:selectedScale,
+      rangeStart,
+      rangeEnd,
+      loop:selectedLoop,
+      weekdays:weekDays,
+      description,
+      date})}/>
   </View>
   );
 };
