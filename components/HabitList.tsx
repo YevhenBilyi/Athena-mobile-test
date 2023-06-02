@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, Button, TextInput, ScrollView } from 'react-native';
+import { View, Button, ScrollView } from 'react-native';
 import * as Types  from '../types/types'
 import CreateHabit from './CreateHabit';
+import { useNavigation } from '@react-navigation/native';
 
 
 
@@ -10,10 +11,11 @@ import CreateHabit from './CreateHabit';
 const HabitComp = ({data, handleDelete}: {data: Types.Habit, handleDelete:any}) => {
   
 
-
+  const navigation = useNavigation();
   const handlePress = () => {
-    // take to the goal
+    navigation.navigate("HabitlogList", {habitName: data.name, habitId: data.id});
   };
+  console.log(data.id)
 
   return (
     <View>

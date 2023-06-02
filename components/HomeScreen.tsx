@@ -3,7 +3,9 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import HabitList from './HabitList';
 import TaskList from './TaskList';
 import CharacterList from './CharacterList';
+import { createStackNavigator } from '@react-navigation/stack';
 import * as Types  from '../types/types';
+import HabitlogList from './HabitlogList';
 
 
 
@@ -30,13 +32,21 @@ const HomeScreen = ({data,handleCreateGeneric, handleDeleteGeneric}:
         goalNameId.push({name: goals[i].name, id: goals[i].id});
 
     }
+    const Stack = createStackNavigator();
         
     return (
     <Tab.Navigator screenOptions={{}} >
         
         <Tab.Screen name="Habits">
-            {() => <HabitList data = {habits} goalNameId={goalNameId}
-             handleCreateGeneric={handleCreateGeneric} handleDeleteHabit={handleDeleteGeneric} />}
+            {() =>
+            <Stack.Navigator>
+                <Stack.Screen name="Habit list">
+                    {() =><HabitList data = {habits} goalNameId={goalNameId}
+                    handleCreateGeneric={handleCreateGeneric} handleDeleteHabit={handleDeleteGeneric} />}
+                </Stack.Screen>
+                <Stack.Screen name="HabitlogList"
+                 component={HabitlogList} initialParams={{habitName:"None", habitId:"None"}}/>
+            </Stack.Navigator>}
         </Tab.Screen>
         <Tab.Screen name="Tasks">
             {() => <TaskList data = {tasks} goalNameId={goalNameId}

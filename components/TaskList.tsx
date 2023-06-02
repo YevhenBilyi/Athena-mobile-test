@@ -45,7 +45,7 @@ const TaskList = ({data, goalNameId, handleCreateGeneric, handleDeleteTask}:
   const [repeat, setRepeat] = useState(false);
   const [frequency, setFrequency] = useState(1);
   const [frequencyType, setFrequencyType] = useState("weekly");
-  let i = 0;
+  const [i, setI] = useState(1);
 
   const handleDelete = (taskId:string, goalId:Number) =>{
     handleDeleteTask(taskId, goalId, "task");
@@ -57,7 +57,7 @@ const TaskList = ({data, goalNameId, handleCreateGeneric, handleDeleteTask}:
     if(taskName.length>0 && selectedGoal){
       const newTask: Types.Task = {
         type: "task",
-        id: String(i++),
+        id: String(i),
         name: taskName,
         goal: selectedGoal,
         due_date: String(date),
@@ -74,6 +74,7 @@ const TaskList = ({data, goalNameId, handleCreateGeneric, handleDeleteTask}:
       setRepeat(false);
       setFrequency(1);
       setFrequencyType("weekly");
+      setI(i+1);
     }
   }
 

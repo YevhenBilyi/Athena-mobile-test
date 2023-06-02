@@ -37,6 +37,7 @@ const CharacterList = ({ data, goalNameId, handleCreateGeneric, handleDeleteChar
   , [data]);
   const [newCharacterName, setNewCharacterName] = useState("");
   const [selectedGoal, setSelectedGoal] = useState(null);
+  const [i, setI] = useState(1);
   
   const handleDelete = (characterId:string,goalId:Number) =>{
     handleDeleteCharacter(characterId,goalId, "character");
@@ -48,11 +49,12 @@ const CharacterList = ({ data, goalNameId, handleCreateGeneric, handleDeleteChar
         goal: selectedGoal,
         name: newCharacterName,
         show_in_lobby: true,
-        id: "1",
+        id: String(i),
         type: "character"
       }
       handleCreateGeneric(newCharacter, selectedGoal, "character");
       setNewCharacterName("");
+      setI(i+1);
     }
   }
 
