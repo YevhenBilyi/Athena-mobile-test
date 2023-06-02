@@ -12,7 +12,7 @@ const CreateHabit = ({handleCreate,goalNameId}:{ handleCreate:any, goalNameId: {
     const [rangeStart, setRangeStart] = useState(0);
     const [rangeEnd, setRangeEnd] = useState(10);
     const [selectedLoop, setSelectedLoop] = useState(null);
-    const [weekDays, setWeekDays] = useState([]);
+    const [weekDays, setWeekDays] = useState([] as string[]);
     const [description, setDescription] = useState("");
     const [date, setDate] = useState(new Date())
 
